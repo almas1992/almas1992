@@ -1,0 +1,55 @@
+name: GitHub Readme
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # every day at midnight
+  workflow_dispatch:
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    name: Stats
+    steps:
+      - name: Stats Card (light mode)
+        uses: Zo-Bro-23/grs-action@main
+        id: stats-light
+        with:
+          token: ${{ secrets.TOKEN }}
+          options: "username=${{ github.repository_owner }}&include_all_commits=true&show_icons=true&hide_title=true&theme=vue&hide_border=true"
+          path: dist/stats-light.svg
+      - name: Stats Card (dark mode)
+        uses: Zo-Bro-23/grs-action@main
+        id: stats-dark
+        with:
+          token: ${{ secrets.TOKEN }}
+          options: "username=${{ github.repository_owner }}&include_all_commits=true&show_icons=true&hide_title=true&theme=dark&hide_border=true"
+          path: dist/stats-dark.svg
+      - name: Top Languages Card (light mode)
+        uses: Zo-Bro-23/grs-action@main
+        id: top-langs-light
+        with:
+          token: ${{ secrets.TOKEN }}
+          options: "username=${{ github.repository_owner }}&layout=compact&theme=vue&hide_border=true&hide=CSS,SCSS,Vue,JavaScript,HTML&langs_count=6"
+          card: "top-langs"
+          path: dist/top-langs-light.svg
+      - name: Top Languages Card (dark mode)
+        uses: Zo-Bro-23/grs-action@main
+        id: top-langs-dark
+        with:
+          token: ${{ secrets.TOKEN }}
+          options: "username=${{ github.repository_owner }}&layout=compact&theme=dark&hide_border=true&hide=CSS,SCSS,Vue,JavaScript,HTML&langs_count=6"
+          card: "top-langs"
+          path: dist/top-langs-dark.svg
+      - name: Contribution Snake
+        uses: Platane/snk/svg-only@v2
+        id: snake
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/github-contribution-grid-snake-light.svg?color_snake=orange&palette=github-light
+            dist/github-contribution-grid-snake-dark.svg?color_snake=#4489ec&palette=github-dark
+      - uses: crazy-max/ghaction-github-pages@v2.6.0
+        with:
+          target_branch: stats
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
