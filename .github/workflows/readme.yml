@@ -40,7 +40,7 @@ jobs:
           card: "top-langs"
           path: dist/top-langs-dark.svg
       - name: Contribution Snake
-        uses: Platane/snk/svg-only@v2
+        uses: Platane/snk/svg-only@v3
         id: snake
         with:
           github_user_name: ${{ github.repository_owner }}
